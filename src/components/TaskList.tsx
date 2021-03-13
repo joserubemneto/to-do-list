@@ -1,5 +1,5 @@
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import Cookies from "js-cookie";
 import "../styles/tasklist.scss";
 
 import { FiTrash, FiCheckSquare } from "react-icons/fi";
@@ -46,6 +46,19 @@ export function TaskList() {
 
     setTasks(filteredTasks);
   }
+
+  useEffect(() => {
+    const cookiesTasks = Cookies.get("tasks");
+    if (cookiesTasks) {
+      //@ts-ignore
+      const parsedCookies = JSON.parse(cookiesTasks);
+      setTasks(parsedCookies);
+    }
+  }, []);
+
+  useEffect(() => {
+    Cookies.set("tasks", tasks);
+  }, [tasks]);
 
   return (
     <section className="task-list container">
